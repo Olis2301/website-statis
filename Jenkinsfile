@@ -2,16 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Clone Repo') {
             steps {
-                echo 'Building...'
+                git branch: 'main', url: 'https://github.com/Olis2301/website-statis.git'
             }
         }
-        stage('Deploy') {
+
+        stage('Deploy to VPS') {
             steps {
-                echo 'Deploying website...'
-                // contoh: copy file ke /var/www/html (jika Jenkins di server lokal)
-                // sh 'cp -r * /var/www/html/'
+                sh '''
+                    scp -o StrictHostKeyChecking=no -r 404.html 500.html Jenkinsfile README.md css img index.html js root@202.10.41.102:/var/www/html/
+                '''
             }
         }
     }
